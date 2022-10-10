@@ -9,15 +9,49 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.itinajero.model.Perfil;
+import net.itinajero.model.Usuario;
 import net.itinajero.model.Vacante;
+import net.itinajero.service.ICategoriasService;
+import net.itinajero.service.IUsuariosService;
 import net.itinajero.service.IVacantesService;
 
 @Controller
 public class HomeController {
 	
 	@Autowired
+	private ICategoriasService serviceCategorias;
+	
+	@Autowired
 	private IVacantesService serviceVacantes;
+	
+	// @Autowired
+	// private IUsuariosService serviceUsuarios;
+	
+	@GetMapping("/signup")
+	public String registrarse(Usuario usuario) {
+		return "formRegistro";
+	}
+	
+	@PostMapping("/signup")
+	public String guardarRegistro(Usuario usuario, RedirectAttributes attributes) {
+		usuario.setEstatus(1); // Activo por defecto
+		usuario.setFechaRegistro(new Date()); // Fecha de Registro, la fecha actual del servidor
+		
+		// creamos el perfil que le asignaremos al usuario nuevo
+		Perfil perfil = new Perfil();
+		perfil.setId(3); // perfil USUARIO
+		
+		// GUARDAMOS el USUARIO en la base de datos
+		// el perfil se guarda automaticamente
+		//serviceUsuarios.guardar(usuario);
+		attributes.addFlashAttribute("msg", "El registro fue guardado correctamente!");
+		
+		return "redirect:/usuarios/index";
+	}
 	
 	@GetMapping("/tabla")
 	public String mostrarTabla(Model model) {
@@ -60,9 +94,19 @@ public class HomeController {
 	// todos los atributos van a estar disponibles en todos los metodos del controlador
 	@ModelAttribute
 	public void setGenericos(Model model) {
+		Vacante vacanteSearch = new Vacante();
+		vacanteSearch.reset();
 		// aqui estamos agregando la clase SERVICEVACANTES la cual al mismo tiempo
 		// busca a las vacantes destacadas
 		model.addAttribute("vacantes", serviceVacantes.buscarDestacadas());
+		model.addAttribute("categorias", serviceCategorias.buscarTodas());
+		model.addAttribute("search", vacanteSearch);
+	}
+	
+	@GetMapping("/search")
+	public String buscar(@ModelAttribute("search") Vacante vacante) {
+		System.out.println("Buscando por: "+vacante);
+		return ("home");
 	}
 	
 }

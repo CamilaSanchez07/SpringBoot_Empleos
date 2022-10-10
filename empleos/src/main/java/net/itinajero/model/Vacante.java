@@ -119,6 +119,11 @@ public class Vacante {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+	
+	// metodo que convierte el valor de la imagen a nulo
+	public void reset() {
+		this.imagen=null;
+	}
 
 	@Override
 	public String toString() {

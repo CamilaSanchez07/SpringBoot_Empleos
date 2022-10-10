@@ -44,7 +44,6 @@ public class VacantesServiceJpa implements IVacantesService {
 	// agregamos un nuevo metodo haciendo uso del metodo para buscar vacantes mediente destacado y estatus
 	@Override
 	public List<Vacante> buscarDestacadas() {
-
 		return vacantesRepo.findByDestacadoAndEstatusOrderByIdDesc(1, "Aprobada");
 	}
 

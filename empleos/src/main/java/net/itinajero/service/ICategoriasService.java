@@ -6,5 +6,6 @@ import net.itinajero.model.Categoria;
 public interface ICategoriasService {
 	void guardar(Categoria categoria);
 	List<Categoria> buscarTodas();
-	Categoria buscarPorId(Integer idCategoria);	
+	Categoria buscarPorId(Integer idCategoria);
+	void eliminar(Integer idCategoria);
 }

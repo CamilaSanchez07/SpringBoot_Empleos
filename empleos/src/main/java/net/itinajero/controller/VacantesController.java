@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,8 +54,7 @@ public class VacantesController {
 	
 	@GetMapping("/create")
 	public String crear(Vacante vacante, Model model) {
-		// añadimos el listado de las categorias con el servicio y con el método "buscarTodas"
-		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
+		
 		return "vacantes/formVacante";
 	}
 	
@@ -92,12 +92,28 @@ public class VacantesController {
 		return "redirect:/vacantes/index"; 
 	}
 
-	@GetMapping("/delete")
-	public String eliminar(@RequestParam("id") int idVacante, Model model) {
-		System.out.println("Borrando vacante con id: " + idVacante);
-		model.addAttribute("id", idVacante);
-		return "mensaje";
+	@GetMapping("/delete/{id}")
+	public String eliminar(@PathVariable("id") int idVacante, Model model,  RedirectAttributes attributes) {
+		// System.out.println("Borrando vacante con id: " + idVacante);
+		
+		// configuramos el metodo eliminar, ahora para eliminar las vacantes de forma dinamica 
+		serviceVacantes.eliminar(idVacante);
+		attributes.addFlashAttribute("msg", "La vacante fue eliminada!");
+		return "redirect:/vacantes/index";
 	}
+	
+	// este metodo nos va a permitir editar las vacantes
+	// va a estar mapeado a una peticion http de tipo get
+	@GetMapping("/edit/{id}")
+	public String editar(@PathVariable("id") int idVacante, Model model) {
+		// esta variable recupera el objeto de la db
+		Vacante vacante = serviceVacantes.buscarPorId(idVacante);
+		model.addAttribute("vacante", vacante);
+		
+		// en este caso se va a retorna al formulario de las vacantes
+		return "vacantes/formVacante";
+	}
+	
 	
 	@GetMapping("/view/{id}")
 	public String verDetalle(@PathVariable("id") int idVacante, Model model) {		
@@ -107,6 +123,13 @@ public class VacantesController {
 		
 		// Buscar los detalles de la vacante en la BD...		
 		return "detalle";
+	}
+	
+	// metodo para agregar datos al modelo que son comunes para todo el controlador
+	@ModelAttribute
+	public void setGenericos(Model model) {
+		// añadimos el listado de las categorias con el servicio y con el método "buscarTodas"
+		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
 	}
 	
 	@InitBinder

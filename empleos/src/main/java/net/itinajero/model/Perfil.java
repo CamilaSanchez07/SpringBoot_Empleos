@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 //esta entidad se mapea a la tabla perfiles
 @Entity
-@Table(name = "perfiles")
+@Table(name = "Perfiles")
 public class Perfil {
 
 	// aquí se configura la llave primaria

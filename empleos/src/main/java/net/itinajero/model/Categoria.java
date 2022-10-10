@@ -6,11 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-// para mapear la clase de categoria debemos agregar las siguientes notaciones:
+//para mapear la clase de categoria debemos agregar las siguientes notaciones:
 @Entity
-
-// en la notacion @table se va a indicar a cual tabla de la bd se va a mapear la clase Categoria
-@Table(name="categorias")
+//en la notacion @table se va a indicar a cual tabla de la bd se va a mapear la clase Categoria
+@Table(name="Categorias")
 public class Categoria {
 
 	@Id

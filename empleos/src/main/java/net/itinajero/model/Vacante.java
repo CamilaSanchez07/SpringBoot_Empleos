@@ -1,7 +1,6 @@
 package net.itinajero.model;
 
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="vacantes")
+@Table(name="Vacantes")
 public class Vacante {
 
 	@Id
@@ -96,6 +95,8 @@ public class Vacante {
 		this.imagen = imagen;
 	}
 	
+	
+
 	public String getEstatus() {
 		return estatus;
 	}
@@ -111,6 +112,8 @@ public class Vacante {
 	public void setDetalles(String detalles) {
 		this.detalles = detalles;
 	}
+	
+	
 
 	public Categoria getCategoria() {
 		return categoria;
@@ -120,8 +123,8 @@ public class Vacante {
 		this.categoria = categoria;
 	}
 	
-	// metodo que convierte el valor de la imagen a nulo
 	public void reset() {
+		
 		this.imagen=null;
 	}
 

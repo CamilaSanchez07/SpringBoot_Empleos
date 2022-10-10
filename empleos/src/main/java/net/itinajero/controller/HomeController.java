@@ -3,7 +3,6 @@ package net.itinajero.controller;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
@@ -21,6 +20,7 @@ import net.itinajero.model.Perfil;
 import net.itinajero.model.Usuario;
 import net.itinajero.model.Vacante;
 import net.itinajero.service.ICategoriasService;
+import net.itinajero.service.IUsuariosService;
 import net.itinajero.service.IVacantesService;
 
 @Controller
@@ -31,28 +31,29 @@ public class HomeController {
 	
 	@Autowired
 	private IVacantesService serviceVacantes;
-	
-	// @Autowired
-	// private IUsuariosService serviceUsuarios;
-	
+
+	@Autowired
+    private IUsuariosService serviceUsuarios;
+
 	@GetMapping("/signup")
-	public String registrarse(Usuario usuario) {
-		return "formRegistro";
+	public String registrarse(Usuario usuario,Model model) {
+		return "usuarios/formRegistro";
 	}
-	
+
 	@PostMapping("/signup")
 	public String guardarRegistro(Usuario usuario, RedirectAttributes attributes) {
-		usuario.setEstatus(1); // Activo por defecto
-		usuario.setFechaRegistro(new Date()); // Fecha de Registro, la fecha actual del servidor
-		
+		attributes = attributes;
+		usuario.setEstatus(1);
+		usuario.setFechaRegistro(new Date());
+
 		// creamos el perfil que le asignaremos al usuario nuevo
 		Perfil perfil = new Perfil();
-		perfil.setId(3); // perfil USUARIO
+		perfil.setId(3);
 		
 		// GUARDAMOS el USUARIO en la base de datos
 		// el perfil se guarda automaticamente
-		//serviceUsuarios.guardar(usuario);
-		attributes.addFlashAttribute("msg", "El registro fue guardado correctamente!");
+		serviceUsuarios.guardar(usuario);
+		attributes.addFlashAttribute("msg", "Usuario registrado exitosamente");		
 		
 		return "redirect:/usuarios/index";
 	}
@@ -91,6 +92,7 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String mostrarHome(Model model) {
+		
 		return "home";
 	}
 	
@@ -100,6 +102,19 @@ public class HomeController {
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
 	
+	@GetMapping("/search")
+	public String buscar(@ModelAttribute("search") Vacante vacante, Model model) {
+		System.out.println("buscando por" +  vacante);
+		
+		// esta configuracion sirve para que en la consulta select se ejecute:
+		// where descripcion like '%?%'
+		ExampleMatcher matcher = ExampleMatcher.matching().
+				withMatcher("descripcion", ExampleMatcher.GenericPropertyMatchers.contains());
+		Example<Vacante> example = Example.of(vacante, matcher);
+		List<Vacante> lista = serviceVacantes.BuscarbyExample(example);
+		model.addAttribute("vacantes", lista);
+		return "home";
+	}
 	
 	// esta notacion sirve para agregar al modelo todos los atributos que queramos
 	// todos los atributos van a estar disponibles en todos los metodos del controlador
@@ -113,20 +128,4 @@ public class HomeController {
 		model.addAttribute("categorias", serviceCategorias.buscarTodas());
 		model.addAttribute("search", vacanteSearch);
 	}
-	
-	@GetMapping("/search")
-	public String buscar(@ModelAttribute("search") Vacante vacante, Model model) {
-		System.out.println("Buscando por: "+vacante);
-		
-		// esta configuracion sirve para que en la consulta select se ejecute:
-		// where descripcion like '%?%'
-		ExampleMatcher matcher = ExampleMatcher.matching().
-				withMatcher("descripcion",ExampleMatcher.GenericPropertyMatchers.contains());
-		
-		Example<Vacante> example = Example.of(vacante,matcher);
-		List<Vacante> lista = serviceVacantes.buscarByExample(example);
-		model.addAttribute("vacantes", lista);
-		return ("home");
-	}
-	
 }

@@ -25,15 +25,15 @@
         <div class="container">
           <h3>Encuentra el trabajo que andas buscando.</h3>
           Puedes buscar por descripción y categoría.
-          <form class="form-inline" th:action="@{/search}" method="get" th:object="${search}">
+          <form class="form-inline" method="get" th:action="@{/search}" th:object="${search}">
             <input type="text" class="form-control mb-3" th:field="*{descripcion}" placeholder="Escriba una búsqueda">&nbsp;
-            <select th:field="*{categoria.id}" class="custom-select custom-select mb-3">
+            <select  th:field="*{categoria.id}" class="custom-select custom-select mb-3">
               <option th:value="${null}" selected>Seleccione una categoría</option>
               <option th:each="categoria : ${categorias}"
-              		  th:value="${categoria.id}"
-              		  th:text="${categoria.nombre}">
-              		  
-              </option>
+                      th:value="${categoria.id}"
+                      th:text="${categoria.nombre}"
+              >Ventas</option>
+              
             </select>&nbsp;
             <button type="submit" class="btn btn-primary mb-3">Buscar</button>
           </form>

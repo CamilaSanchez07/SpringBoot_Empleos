@@ -16,9 +16,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-// esta entidad se mapea a la tabla usuarios
+//esta entidad se mapea a la tabla usuarios
 @Entity
-@Table(name = "usuarios")
+@Table(name = "Usuarios")
 public class Usuario {
 
 	// aquí se declara la llave primaria
@@ -44,12 +44,11 @@ public class Usuario {
 	
 	// metodo para agregar un perfil a un usuario
 	public void agregar(Perfil tempPerfil) {
-		
 		// se condiciona si perfil es nulo, se crea una nueva lista enlasada
 		if (perfiles == null) {
 			perfiles = new LinkedList<Perfil>();
 		}
-		// si perfil no es nulo se manda a llamar a esta lista 
+		// si perfil no es nulo se manda a llamar a esta lista
 		perfiles.add(tempPerfil);
 	}
 

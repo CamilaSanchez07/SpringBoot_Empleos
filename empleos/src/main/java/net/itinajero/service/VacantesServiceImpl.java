@@ -9,7 +9,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import net.itinajero.model.Vacante;
 
 @Service
@@ -110,7 +109,7 @@ public class VacantesServiceImpl implements IVacantesService {
 	}
 
 	@Override
-	public List<Vacante> buscarByExample(Example<Vacante> example) {
+	public List<Vacante> BuscarbyExample(Example<Vacante> Example) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -35,7 +35,7 @@ public class VacantesController {
 	
 	@Value("${empleosapp.ruta.imagenes}")
 	private String ruta;
-
+	
 	@Autowired
 	private IVacantesService serviceVacantes;
 	
@@ -52,26 +52,24 @@ public class VacantesController {
     	model.addAttribute("vacantes", lista);
 		return "vacantes/listVacantes";
 	}
-	
+
 	// este metodo recibe como parametro un tipo pageable, aquí vamos a dividir la lista en paginas
 	@GetMapping(value = "/indexPaginate")
 	public String mostrarIndexPaginado(Model model, Pageable page) {
-	Page<Vacante> lista = serviceVacantes.buscarTodas(page);
-	model.addAttribute("vacantes", lista);
-	return "vacantes/listVacantes";
+	   Page<Vacante>lista = serviceVacantes.buscarTodas(page);
+	   model.addAttribute("vacantes", lista);
+	
+	   return "vacantes/listVacantes";
 	}
-
 	
 	@GetMapping("/create")
 	public String crear(Vacante vacante, Model model) {
-		
 		return "vacantes/formVacante";
 	}
 	
 	//BindingResult ayuda a mostrar el error dentro del controlador
 	@PostMapping("/save")
-	public String guardar(Vacante vacante, BindingResult result, RedirectAttributes attributes,
-			@RequestParam("archivoImagen") MultipartFile multiPart) {
+	public String guardar(Vacante vacante, BindingResult result, RedirectAttributes attributes, @RequestParam("archivoImagen") MultipartFile multiPart) {
 		// el siguiente condicional sirve para preguntar si existieron errores en el controlador
 		if (result.hasErrors()) {
 			for (ObjectError error: result.getAllErrors()){
@@ -83,15 +81,14 @@ public class VacantesController {
 		if (!multiPart.isEmpty()) {
 			// ruta donde se guardan las imasgenes
 			//String ruta = "c:/empleos/img-vacantes/"; // Windows
-			String nombreImagen = Utileria.guardarArchivo (multiPart, ruta);
+			String nombreImagen = Utileria.guardarArchivo(multiPart, ruta);
 			
-			if (nombreImagen != null) { // La imagen SI se subio
-			  // Procesamos la variable nombreImagen
-				vacante.setImagen(nombreImagen);
-			
+			if (nombreImagen != null){ // La imagen si se subio
+				// Procesamos la variable nombreImagen
+				vacante.setImagen (nombreImagen);
 			}
-		}
-		
+		}	
+	
 		serviceVacantes.guardar(vacante);
 		
 		// usamos redirect y flashattribute para mostrar el mensaje de guardado
@@ -103,12 +100,12 @@ public class VacantesController {
 	}
 
 	@GetMapping("/delete/{id}")
-	public String eliminar(@PathVariable("id") int idVacante, Model model,  RedirectAttributes attributes) {
+	public String eliminar(@PathVariable("id") int idVacante, RedirectAttributes attributes) {
 		// System.out.println("Borrando vacante con id: " + idVacante);
 		
-		// configuramos el metodo eliminar, ahora para eliminar las vacantes de forma dinamica 
+		// configuramos el metodo eliminar, ahora para eliminar las vacantes de forma dinamica
 		serviceVacantes.eliminar(idVacante);
-		attributes.addFlashAttribute("msg", "La vacante fue eliminada!");
+		attributes.addFlashAttribute("msg", "La vacante fue eliminada");
 		return "redirect:/vacantes/index";
 	}
 	
@@ -119,11 +116,16 @@ public class VacantesController {
 		// esta variable recupera el objeto de la db
 		Vacante vacante = serviceVacantes.buscarPorId(idVacante);
 		model.addAttribute("vacante", vacante);
-		
 		// en este caso se va a retorna al formulario de las vacantes
 		return "vacantes/formVacante";
 	}
 	
+	// metodo para agregar datos al modelo que son comunes para todo el controlador
+	@ModelAttribute
+	public void setGenericos(Model model) {
+		// añadimos el listado de las categorias con el servicio y con el método "buscarTodas"
+		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
+	}
 	
 	@GetMapping("/view/{id}")
 	public String verDetalle(@PathVariable("id") int idVacante, Model model) {		
@@ -133,13 +135,6 @@ public class VacantesController {
 		
 		// Buscar los detalles de la vacante en la BD...		
 		return "detalle";
-	}
-	
-	// metodo para agregar datos al modelo que son comunes para todo el controlador
-	@ModelAttribute
-	public void setGenericos(Model model) {
-		// añadimos el listado de las categorias con el servicio y con el método "buscarTodas"
-		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
 	}
 	
 	@InitBinder

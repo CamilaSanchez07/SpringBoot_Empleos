@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,9 @@ public class VacantesController {
 	
 	// para hacer uso de las categorias inyectamos el servicio usando la siguiente anotación:
 	@Autowired
+	
+	//esta notacion sirve para identificar el bean q sera consumido
+	//@Qualifier("categoriasServiceJpa")
 	private ICategoriasService serviceCategorias; 
 	
 	@GetMapping("/index")

@@ -4,14 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import net.itinajero.model.Categoria;
 import net.itinajero.repository.CategoriasRepository;
 import net.itinajero.service.ICategoriasService;
 
+@Service
+// Con la anotacion @Primary le estamos diciendo al controlador que utilice primeramente esta interfaz
+@Primary
 public class CategoriasServiceJpa implements ICategoriasService {
 
-	// para usar la los metodos en el servicio debemos inyectar una instancia en el repositorio 
+	// para inyectar una instancia agregamos la notacion @Autowired
 	@Autowired
 	private CategoriasRepository categoriasRepo;
 	

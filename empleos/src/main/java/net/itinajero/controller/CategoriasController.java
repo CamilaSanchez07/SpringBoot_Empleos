@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,14 @@ public class CategoriasController {
 		List<Categoria> lista = serviceCategorias.buscarTodas();
     	model.addAttribute("categorias", lista);
 		return "categorias/listCategorias";		
+	}
+	
+	// este metodo recibe como parametro un tipo pageable, aquí vamos a dividir la lista en paginas
+	@GetMapping(value = "/indexPaginate")
+	public String mostrarIndexPaginado(Model model, Pageable page) {
+		Page<Categoria> lista = serviceCategorias.buscarTodas(page);
+		model.addAttribute("categorias", lista);
+		return "categorias/listCategorias";
 	}
 	
 	// en esta url se configura el boton para CREAR una categoria

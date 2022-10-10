@@ -5,9 +5,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,7 +21,6 @@ import net.itinajero.model.Perfil;
 import net.itinajero.model.Usuario;
 import net.itinajero.model.Vacante;
 import net.itinajero.service.ICategoriasService;
-import net.itinajero.service.IUsuariosService;
 import net.itinajero.service.IVacantesService;
 
 @Controller
@@ -90,6 +94,13 @@ public class HomeController {
 		return "home";
 	}
 	
+	// initBinder para String si los detecta vacios en el Data Binding los settea a NULL
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+	}
+	
+	
 	// esta notacion sirve para agregar al modelo todos los atributos que queramos
 	// todos los atributos van a estar disponibles en todos los metodos del controlador
 	@ModelAttribute
@@ -104,8 +115,17 @@ public class HomeController {
 	}
 	
 	@GetMapping("/search")
-	public String buscar(@ModelAttribute("search") Vacante vacante) {
+	public String buscar(@ModelAttribute("search") Vacante vacante, Model model) {
 		System.out.println("Buscando por: "+vacante);
+		
+		// esta configuracion sirve para que en la consulta select se ejecute:
+		// where descripcion like '%?%'
+		ExampleMatcher matcher = ExampleMatcher.matching().
+				withMatcher("descripcion",ExampleMatcher.GenericPropertyMatchers.contains());
+		
+		Example<Vacante> example = Example.of(vacante,matcher);
+		List<Vacante> lista = serviceVacantes.buscarByExample(example);
+		model.addAttribute("vacantes", lista);
 		return ("home");
 	}
 	

@@ -30,7 +30,7 @@ public class VacantesServiceJpa implements IVacantesService {
 		Optional<Vacante> optional = vacantesRepo.findById(idVacante);
 		
 		if(optional.isPresent()) {
-			optional.get();
+			return optional.get();
 		}
 		return null;
 	}
@@ -39,6 +39,13 @@ public class VacantesServiceJpa implements IVacantesService {
 	public void guardar(Vacante vacante) {
 		vacantesRepo.save(vacante);
 
+	}
+
+	// agregamos un nuevo metodo haciendo uso del metodo para buscar vacantes mediente destacado y estatus
+	@Override
+	public List<Vacante> buscarDestacadas() {
+
+		return vacantesRepo.findByDestacadoAndEstatusOrderByIdDesc(1, "Aprobada");
 	}
 
 }

@@ -3,10 +3,13 @@ package net.itinajero.controller;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import net.itinajero.model.Vacante;
 import net.itinajero.service.IVacantesService;
 
@@ -50,9 +53,16 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String mostrarHome(Model model) {
-		List<Vacante> lista = serviceVacantes.buscarTodas();
-		model.addAttribute("vacantes", lista);
 		return "home";
+	}
+	
+	// esta notacion sirve para agregar al modelo todos los atributos que queramos
+	// todos los atributos van a estar disponibles en todos los metodos del controlador
+	@ModelAttribute
+	public void setGenericos(Model model) {
+		// aqui estamos agregando la clase SERVICEVACANTES la cual al mismo tiempo
+		// busca a las vacantes destacadas
+		model.addAttribute("vacantes", serviceVacantes.buscarDestacadas());
 	}
 	
 }

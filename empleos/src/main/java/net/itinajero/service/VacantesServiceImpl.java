@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import net.itinajero.model.Vacante;
 
 @Service
@@ -90,6 +92,12 @@ public class VacantesServiceImpl implements IVacantesService {
 
 	public void guardar(Vacante vacante) {
 		lista.add(vacante);
+	}
+
+	@Override
+	public List<Vacante> buscarDestacadas() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

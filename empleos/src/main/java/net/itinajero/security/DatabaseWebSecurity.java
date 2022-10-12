@@ -41,6 +41,11 @@ public class DatabaseWebSecurity extends WebSecurityConfigurerAdapter {
 				
 				// en este metodo especificamos las vistas publicas
 				.antMatchers("/", "/signup", "/search", "/vacantes/view/**").permitAll()
+				
+				// Asignar permisos a URLs por ROLES
+				.antMatchers("/vacantes/**").hasAnyAuthority("SUPERVISOR","ADMINISTRADOR")
+				.antMatchers("/categorias/**").hasAnyAuthority("SUPERVISOR","ADMINISTRADOR")
+				.antMatchers("/usuarios/**").hasAnyAuthority("ADMINISTRADOR")
 
 				// en este metodo especificamos las demás urls que no son publicas y que usan autenticacion
 				.anyRequest().authenticated()

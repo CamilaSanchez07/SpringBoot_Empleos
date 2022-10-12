@@ -7,26 +7,26 @@
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
       <!-- configuramos la url para mostrar las vacantes -->
-      <li class="nav-item">
+      <li class="nav-item" sec:authorize="hasAnyAuthority('SUPERVISOR','ADMINISTRADOR')">
         <a class="nav-link" th:href="@{/vacantes/indexPaginate}">Vacantes</a>
       </li>
       
       <!-- configuramos la url para mostrar las categorias -->
-      <li class="nav-item">
+      <li class="nav-item" sec:authorize="hasAnyAuthority('SUPERVISOR','ADMINISTRADOR')">
         <a class="nav-link" th:href="@{/categorias/indexPaginate}">Categorias</a>
       </li>
       
       <!-- configuramos la url para mostrar los usuarios -->
-      <li class="nav-item">
+      <!-- para que una lista se muestre a un rol en especifico se utiliza sec:authorize  -->
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
         <a class="nav-link" th:href="@{/usuarios/index}">Usuarios</a>
       </li>          
-    </ul>  
-    <a class="btn btn-primary" href="#">Ingresar</a>&nbsp;
+    </ul>
     
+    <a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
     <!-- Boton para registrar un usuario -->
-     <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
-     
-     <!-- boton para cerrar sesion del usuario -->
-     <a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;
+    <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
+    <!-- boton para cerrar sesion del usuario -->
+  	<a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;
   </div>
 </nav>

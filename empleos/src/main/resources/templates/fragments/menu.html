@@ -27,6 +27,8 @@
     <!-- Boton para registrar un usuario -->
     <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
     <!-- boton para cerrar sesion del usuario -->
+    <!-- esta liena muestra una bienvenida al usuario que a iniciado sesion -->
+    <span th:if="${session.usuario != null}" class="text-light" th:text="'Bienvenido ' + ${session.usuario.nombre}"></span>&nbsp;
   	<a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;
   </div>
 </nav>

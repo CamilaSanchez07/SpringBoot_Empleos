@@ -4,5 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import net.itinajero.model.Usuario;
 
 public interface UsuariosRepository extends JpaRepository<Usuario, Integer> {
+	
+	//metodo que busca por username
+	Usuario findByUsername( String username);
 
 }

@@ -22,13 +22,17 @@
         <a class="nav-link" th:href="@{/usuarios/index}">Usuarios</a>
       </li>          
     </ul>
-    
-    <a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
-    <!-- Boton para registrar un usuario -->
-    <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
-    <!-- boton para cerrar sesion del usuario -->
-    <!-- esta liena muestra una bienvenida al usuario que a iniciado sesion -->
-    <span th:if="${session.usuario != null}" class="text-light" th:text="'Bienvenido ' + ${session.usuario.nombre}"></span>&nbsp;
-  	<a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;
-  </div>
+
+		<!-- este div muestra de forma dinamica los botones de ingresar y registrar  -->
+		<div sec:authorize="isAnonymous()">
+			<a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
+			<a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>
+		</div>
+   
+		<!-- este div muestra de forma dinamica la bienvenida y el boton salir -->
+		<div sec:authorize="isAuthenticated()">
+			<span class="text-light">Bienvenido</span>&nbsp;<span class="text-light" sec:authentication="name"></span>&nbsp;
+			<a class="btn btn-primary" th:href="@{/logout}">Salir</a>
+		</div>
+	</div>
 </nav>

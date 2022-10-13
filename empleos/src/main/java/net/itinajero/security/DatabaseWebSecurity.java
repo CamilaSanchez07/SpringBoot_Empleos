@@ -54,7 +54,7 @@ public class DatabaseWebSecurity extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated()
 					
 			// LOGIN NO REQUIERE AUTENTICACION
-			.and().formLogin().permitAll();
+			.and().formLogin().loginPage("/login").permitAll();
 	}
 		
 	// este metodo va apermitir encriptar las contraseñas de los usuarios registrados
